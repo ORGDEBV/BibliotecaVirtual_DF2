@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/plantilla0.1.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <f:metadata>
+        <f:viewParam name="ID_PERFIL_DOCUMENTAL" value="#{perfilDocumentalDetalleBean.perfil}" />
+        <f:viewParam name="ID_PERFIL_DOCUMENTAL" value="#{tipoBean.perfil}" />
+        <f:viewParam name="ID_PERFIL_DOCUMENTAL" value="#{documentalBean.perfil}" />
+        <f:viewParam name="PERFIL_DOCUMENTAL" value="#{documentalBean.perfil_documental}" />
+    </f:metadata>
+
+    <ui:define name="breadcumb">
+        <p:breadCrumb styleClass="ShowOnDesktop" >
+            <p:menuitem url="/principal" />
+            <p:menuitem value="#{documentalBean.perfil_documental}" url="#" />
+            <p:menuitem value="Listado General" outcome="documentalListGn.xhtml">
+                <f:param name="ID_PERFIL_DOCUMENTAL" value="#{perfilDocumentalDetalleBean.perfil}" />
+                <f:param name="PERFIL_DOCUMENTAL" value="#{documentalBean.perfil_documental}" />
+            </p:menuitem>
+        </p:breadCrumb>
+    </ui:define>
+
+    <ui:define name="content">
+        <p:tabMenu activeIndex="0">
+            <p:menuitem value="Listado General" outcome="documentalListGn.xhtml" styleClass="icon-menu">
+                <f:param name="ID_PERFIL_DOCUMENTAL" value="#{documentalBean.perfil}"/>
+                <f:param name="PERFIL_DOCUMENTAL" value="#{documentalBean.perfil_documental}" />
+            </p:menuitem>
+            <p:menuitem value="Listado" outcome="documentalList.xhtml" styleClass="icon-list">
+                <f:param name="ID_PERFIL_DOCUMENTAL" value="#{documentalBean.perfil}"/>
+                <f:param name="PERFIL_DOCUMENTAL" value="#{documentalBean.perfil_documental}" />
+            </p:menuitem>
+            <p:menuitem value="Registrar/Modificar" outcome="documentalUpd.xhtml" styleClass="icon-underline6">
+                <f:param name="ID_PERFIL_DOCUMENTAL" value="#{documentalBean.perfil}"/>
+                <f:param name="PERFIL_DOCUMENTAL" value="#{documentalBean.perfil_documental}" />
+            </p:menuitem>
+        </p:tabMenu>
+
+        <p:separator />
+
+        <h:form id="frmListDocumental">
+            <p:dataTable id="tblDocumental"
+                         var="documental"
+                         value="#{documentalBean.lstDocumentalGn}"
+                         paginator="true"
+                         paginatorPosition="top"
+                         widgetVar="tblDocumental"
+                         emptyMessage="No se encontraron registros"
+                         filteredValue="#{documentalBean.lstDocumentalFilter}"
+                         resizableColumns="true"
+                         tableStyle="width:auto"
+                         rows="10">
+                <f:facet name="header">
+                    <p:outputPanel>
+                        <h:outputText value="Buscar Documental"/>
+                        <p:inputText id="globalFilter" style="width:200px;margin-left:30px;border-radius:18px;" placeholder="Ingrese su búsqueda..."/>
+                        <p:commandButton style="margin-left:30px;border-radius: 18px;border:0px;" onclick="PF('tblDocumental').filter()" value="Filtrar"></p:commandButton>
+                    </p:outputPanel>
+                </f:facet>
+                <p:column filterStyle="display:none" filterBy="#{biblioteca.ID_DOCUMENTAL}" filterMatchMode="contains" headerText="Detalle" width="5%" style="text-align: center;">
+                    <p:commandButton actionListener="#{documentalBean.cargaData(documental.ID_DOCUMENTAL)}" icon="fa fa-search">
+                    </p:commandButton>
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.ID_DOCUMENTAL}" filterMatchMode="contains" headerText="ID">
+                    <h:outputText value="#{documental.ID_DOCUMENTAL}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.OTRO}" filterMatchMode="contains" headerText="COD. BARRAS" >
+                    <h:outputText value="#{documental.OTRO}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.TITULO}" filterMatchMode="contains" headerText="TITULO" >
+                    <h:outputText value="#{documental.TITULO}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.TITULO_ALTERNATIVO}" filterMatchMode="contains" headerText="TITULO ALTERNATIVO" >
+                    <h:outputText value="#{documental.TITULO_ALTERNATIVO}" />
+                </p:column>
+                <!-- resumen -->
+                <!-- descripcion -->
+                <p:column filterStyle="display:none" filterBy="#{documental.ID_TIPO}" filterMatchMode="contains" headerText="TIPO" style="display:none">
+                    <h:outputText value="#{documental.ID_TIPO}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.TIPO}" filterMatchMode="contains" headerText="TIPO">
+                    <h:outputText value="#{documental.TIPO}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.TIENE_COMO_VERSION}" filterMatchMode="contains" headerText="TIENE COMO VERSION" >
+                    <h:outputText value="#{documental.TIENE_COMO_VERSION}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.ES_PARTE_DE}" filterMatchMode="contains" headerText="ES PARTE DE" >
+                    <h:outputText value="#{documental.ES_PARTE_DE}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.TIENE_PARTE_DE}" filterMatchMode="contains" headerText="TIENE PARTE DE" >
+                    <h:outputText value="#{documental.TIENE_PARTE_DE}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.ID_COBERTURA_ESPACIAL}" filterMatchMode="contains" headerText="COBERTURA ESPACIAL" style="display:none;">
+                    <h:outputText value="#{documental.ID_COBERTURA_ESPACIAL}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.COBERTURA_ESPACIAL}" filterMatchMode="contains" headerText="COBERTURA ESPACIAL" >
+                    <h:outputText value="#{documental.COBERTURA_ESPACIAL}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.ID_COBERTURA_TEMPORAL}" filterMatchMode="contains" headerText="COBERTURA TEMPORAL" style="display:none;">
+                    <h:outputText value="#{documental.ID_COBERTURA_TEMPORAL}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.COBERTURA_TEMPORAL}" filterMatchMode="contains" headerText="COBERTURA TEMPORAL" >
+                    <h:outputText value="#{documental.COBERTURA_TEMPORAL}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.FECHA_DISPONIBLE}" filterMatchMode="contains" headerText=" FECHA DISPONIBLE" >
+                    <h:outputText value="#{documental.FECHA_DISPONIBLE}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.FECHA_PUBLICACION}" filterMatchMode="contains" headerText="FECHA PUBLICACION" >
+                    <h:outputText value="#{documental.FECHA_PUBLICACION}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.FECHA_ACEPTACION}" filterMatchMode="contains" headerText="FECHA ACEPTACION" >
+                    <h:outputText value="#{documental.FECHA_ACEPTACION}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.FECHA_COPYRIGHT}" filterMatchMode="contains" headerText="FECHA COPYRIGHT" >
+                    <h:outputText value="#{documental.FECHA_COPYRIGHT}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.ID_FORMATO}" filterMatchMode="contains" headerText="FORMATO" >
+                    <h:outputText value="#{documental.ID_FORMATO}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.FORMATO_EXTENSION}" filterMatchMode="contains" headerText="FORMATO EXTENSION" >
+                    <h:outputText value="#{documental.FORMATO_EXTENSION}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.FORMATO_MEDIO_DESCRIPCION}" filterMatchMode="contains" headerText="FORMATO MEDIO" >
+                    <h:outputText value="#{documental.FORMATO_MEDIO_DESCRIPCION}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.ID_EDITORIAL}" filterMatchMode="contains" headerText="EDITORIAL" style="display: none;">
+                    <h:outputText value="#{documental.ID_EDITORIAL}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.EDITORIAL}" filterMatchMode="contains" headerText="EDITORIAL" style="display: none;">
+                    <h:outputText value="#{documental.EDITORIAL}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.DERECHO}" filterMatchMode="contains" headerText="DERECHOS" >
+                    <h:outputText value="#{documental.DERECHO}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.DERECHO_ACCESO}" filterMatchMode="contains" headerText="DERECHOS DE ACCESO" >
+                    <h:outputText value="#{documental.DERECHO_ACCESO}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.ID_AUDIENCIA}" filterMatchMode="contains" headerText="AUDIENCIA" style="display:none;">
+                    <h:outputText value="#{documental.ID_AUDIENCIA}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.AUDIENCIA}" filterMatchMode="contains" headerText="AUDIENCIA" >
+                    <h:outputText value="#{documental.AUDIENCIA}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.URL}" filterMatchMode="contains" headerText="URL" >
+                    <h:outputText value="#{documental.URL}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.ISBN}" filterMatchMode="contains" headerText="ISBN" >
+                    <h:outputText value="#{documental.ISBN}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.OTRO}" filterMatchMode="contains" headerText="COD BARRAS" >
+                    <h:outputText value="#{documental.OTRO}" />
+                </p:column>
+                <p:column filterStyle="display:none" filterBy="#{documental.NUMERO_PAGINAS}" filterMatchMode="contains" headerText="NÚMERO DE IMAGENES" >
+                    <h:outputText value="#{documental.NUMERO_PAGINAS}" />
+                </p:column>
+            </p:dataTable>
+        </h:form> 
+        <p:dialog styleClass="Wid60Imp" header="Documental Seleccionado" id="dlgDocumental" widgetVar="dlgDocumental"  modal="true" showEffect="fade" hideEffect="fade">
+            <h:form>
+                <p:scrollPanel mode="native" style="height:485px">
+                    <p:panelGrid style="text-align:center;margin:0 auto;" columns="2">
+                        <h:outputText value="ID DOCUMENTAL: " />
+                        <h:outputText value="#{documentalBean.dgn.ID_DOCUMENTAL}" />
+                        <h:outputText value="CÓDIGO: " />
+                        <h:outputText value="#{documentalBean.dgn.OTRO}" />
+                        <h:outputText value="TITULO:" />
+                        <h:outputText value="#{documentalBean.dgn.TITULO}" />
+                        <h:outputText value="AUTORES: "/>
+                        <p:dataList value="#{documentalBean.listdetautores}"  var="a" emptyMessage="No hay autores asignadas." itemType="circle">
+                            #{a.APELLIDO_PATERNO} #{a.APELLIDO_MATERNO}, #{a.NOMBRE}
+                        </p:dataList>
+                        <h:outputText value="EDITORIAL: " />
+                        <h:outputText value="#{documentalBean.dgn.EDITORIAL}" />
+                        <h:outputText value="FECHA PUBLICACIÓN: " />
+                        <h:outputText value="#{documentalBean.dgn.FECHA_PUBLICACION}" />
+                        <h:outputText value="COLECCIÓN: "/>
+                        <p:dataList value="#{documentalBean.listdetcoleccion}"  var="c" emptyMessage="No hay colecciones asignadas." itemType="circle">
+                            #{c.DESCRIPCION}
+                        </p:dataList>
+                        <h:outputText value="SERIE: "/>
+                        <p:dataList value="#{documentalBean.listdetserie}"  var="s" emptyMessage="No hay series asignadas." itemType="circle">
+                            #{s.SERIE}
+                        </p:dataList>
+                        <h:outputText value="LENGUAJE: "/>
+                        <p:dataList value="#{documentalBean.listdetlenguaje}"  var="l" emptyMessage="No hay lenguajes asignadas." itemType="circle">
+                            #{l.LENGUAJE}
+                        </p:dataList>
+                        <h:outputText value="TEMAS: "/>
+                        <p:dataList value="#{documentalBean.listdettema}"  var="t" emptyMessage="No hay temas asignadas." itemType="circle">
+                            #{t.TEMA}
+                        </p:dataList>
+                        <h:outputText value="TIPO: " />
+                        <h:outputText value="#{documentalBean.dgn.TIPO}" />
+                        <h:outputText value="VERSIÓN:  " />
+                        <h:outputText value="#{documentalBean.dgn.TIENE_COMO_VERSION}" />
+                        <h:outputText value="COBERTURA ESPACIAL: " />
+                        <h:outputText value="#{documentalBean.dgn.COBERTURA_ESPACIAL}" />
+                        <h:outputText value="COBERTURA TEMPORAL: " />
+                        <h:outputText value="#{documentalBean.dgn.COBERTURA_TEMPORAL}" />
+                        <h:outputText value="CONTRIBUIDORES: "/>
+                        <p:dataList value="#{documentalBean.listdetcontribuidor}"  var="cn" emptyMessage="No hay contribuidores registrados." itemType="circle">
+                            #{cn.CONTRIBUIDOR}
+                        </p:dataList>
+                        <h:outputText value="DERECHOS: " />
+                        <h:outputText value="#{documentalBean.dgn.DERECHO}" />
+                        <h:outputText value="AUDIENCIA: " />
+                        <h:outputText value="#{documentalBean.dgn.AUDIENCIA}" />
+                        <h:outputText value="FORMATO: " />
+                        <h:outputText value="#{documentalBean.dgn.FORMATO}" />
+                        <h:outputText value="FORMATO EXTENSIÓN: " />
+                        <h:outputText value="#{documentalBean.dgn.FORMATO_EXTENSION}" />
+                        <h:outputText value="FORMATO MEDIO: " />
+                        <h:outputText value="#{documentalBean.dgn.FORMATO_MEDIO_DESCRIPCION}" />
+                        <h:outputText value="NÚMERO IMAGENES: " />
+                        <h:outputText value="#{documentalBean.dgn.NUMERO_PAGINAS}" />
+                    </p:panelGrid>
+                </p:scrollPanel>
+            </h:form>
+        </p:dialog>
+        
+        <style>
+            .ui-panelgrid, .ui-panelgrid td, .ui-panelgrid tr{
+                border-style: solid !important;
+            }
+            .ui-datalist{
+                border: none;
+            }
+        </style>
+    </ui:define>
+
+</ui:composition>

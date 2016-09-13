@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/plantilla0.1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="breadcumb">
+      <p:breadCrumb styleClass="ShowOnDesktop" >
+            <p:menuitem url="/principal" />
+            <p:menuitem value="Reportes" url="#" />
+           <p:menuitem value="Log Configuracion" url="#" />
+        </p:breadCrumb>
+
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="frmLog">
+
+
+            <p:dataTable var="log" value="#{logTablaBean.lstLogTabla}" widgetVar="tblLog"
+                         emptyMessage="No se encontraron registros" filteredValue="#{logTablaBean.lstLogTablaFilter}" scrollable="true" scrollWidth="100%"
+                         paginator="true"
+                         paginatorPosition="top" rows="50">
+                <f:facet name="header">
+                    <p:outputPanel>
+                        <h:outputText value="Buscar en todos los campos:" />
+                        <p:inputText id="globalFilter" style="width:30%;margin-left:30px;border-radius:18px;" placeholder="Escriba palabra clave"/>
+                    <p:commandButton style="margin-left:30px;border-radius: 18px;border:0px;" onclick="PF('tblLog').filter()" value="Filtrar"></p:commandButton>
+                        
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column headerText="Fecha" filterBy="#{log[0]}"  filterMatchMode="contains">
+                    <h:outputText value="#{log[0]}"/>
+                </p:column>
+                <p:column headerText="Hora" filterBy="#{log[1]}" filterMatchMode="contains">
+                    <h:outputText value="#{log[1]}"/>
+                </p:column>
+                <p:column headerText="IdTabla" filterBy="#{log[2]}"  filterMatchMode="contains">
+                    <h:outputText value="#{log[2]}"/>
+                </p:column>
+                <p:column headerText="Tabla" filterBy="#{log[3]}"  filterMatchMode="contains">
+                    <h:outputText value="#{log[3]}"/>
+                </p:column>
+                <p:column headerText="IdAccion" filterBy="#{log[4]}"  filterMatchMode="contains">
+                    <h:outputText value="#{log[4]}"/>
+                </p:column>
+                <p:column headerText="Accion" filterBy="#{log[5]}"  filterMatchMode="contains">
+                    <h:outputText value="#{log[5]}"/>
+                </p:column>
+                <p:column headerText="IdRegistro" filterBy="#{log[6]}"  filterMatchMode="contains">
+                    <h:outputText value="#{log[6]}"/>
+                </p:column>
+                <p:column headerText="IdUsuario" filterBy="#{log[7]}"  filterMatchMode="contains">
+                    <h:outputText value="#{log[7]}"/>
+                </p:column>
+                <p:column headerText="Usuario" filterBy="#{log[8]}" filterMatchMode="contains">
+                    <h:outputText value="#{log[8]}"/>
+                </p:column>
+                <p:column headerText="Personal" filterBy="#{log[9]}"  filterMatchMode="contains">
+                    <h:outputText value="#{log[9]}"/>
+                </p:column>
+                <p:column headerText="IdBiblioteca" filterBy="#{log[10]}"  filterMatchMode="contains">
+                    <h:outputText value="#{log[10]}"/>
+                </p:column>
+                <p:column headerText="Biblioteca" filterBy="#{log[11]}"  filterMatchMode="contains">
+                    <h:outputText value="#{log[11]}"/>
+                </p:column>
+
+            </p:dataTable>
+
+
+
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

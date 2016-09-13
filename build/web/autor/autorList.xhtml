@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="../template/plantilla0.1.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="breadcumb">
+        <p:breadCrumb styleClass="ShowOnDesktop" >
+            <p:menuitem url="/principal" />
+            <p:menuitem value="Autor" url="#" />
+            <p:menuitem value="Listado" url="/Autor/List" />
+        </p:breadCrumb>
+    </ui:define>
+
+    <ui:define name="content"> 
+        <p:tabMenu activeIndex="0">
+            <p:menuitem value="Listado" outcome="autorList.xhtml" styleClass="icon-list">
+            </p:menuitem>
+            <p:menuitem value="Registrar" outcome="autorAdd.xhtml" styleClass="icon-googleplus">
+            </p:menuitem>
+        </p:tabMenu>
+        <p:separator />
+        <h:form id="frmListAutor">
+            <p:dataTable id="tablaAutor" widgetVar="tablaAutor" value="#{autor.listAut}" var="aut" paginator="true" 
+                         lazy="false" paginatorPosition="top" emptyMessage="No se encontraron autores." 
+                         filteredValue="#{autor.filterListAutor}" rows="5">
+                <f:facet name="header">
+                    <p:outputPanel>
+                        <h:outputText value="Busque un autor:" />
+                        <p:inputText id="globalFilter" onkeyup="PF('tablaAutor').filter()" style="width:200px;margin-left:30px;border-radius:18px;" placeholder="Ingrese su búsqueda..."/>
+                    </p:outputPanel>
+                </f:facet>
+                <p:column headerText="Id" filterStyle="display:none" filterBy="#{aut.ID_AUTOR}" filterMatchMode="contains" rendered="false">
+                    <p:outputLabel value="#{aut.ID_AUTOR}"/>
+                </p:column>                
+                <p:column headerText="Ap. Paterno" filterStyle="display:none" filterBy="#{aut.APELLIDO_PATERNO}" filterMatchMode="contains">
+                    <p:outputLabel value="#{aut.APELLIDO_PATERNO}"/>
+                </p:column>
+                <p:column headerText="Ap. Materno" filterStyle="display:none" filterBy="#{aut.APELLIDO_MATERNO}" filterMatchMode="contains" >
+                    <p:outputLabel value="#{aut.APELLIDO_MATERNO}"/>
+                </p:column>
+                <p:column headerText="Nombre" filterStyle="display:none" filterBy="#{aut.NOMBRE}" filterMatchMode="contains" >
+                    <p:outputLabel value="#{aut.NOMBRE}"/>
+                </p:column>
+                <p:column headerText="País" filterStyle="display:none" filterBy="#{aut.PAIS}" filterMatchMode="contains">
+                    <p:outputLabel value="#{aut.PAIS}"/>
+                </p:column>
+                <p:column headerText="Editar" width="8%" style="text-align: center" filterStyle="display:none" filterBy="#{aut.ID_AUTOR}" filterMatchMode="contains">
+                    <p:commandButton  update=":frmListAutor:grid" oncomplete="PF('dlg1').show()" icon="ui-icon-pencil">
+                        <f:setPropertyActionListener value="#{aut}" target="#{autor.autAux}" />
+                    </p:commandButton>
+                </p:column>
+                <p:column headerText="Eliminar" width="8%" style="text-align: center" filterStyle="display:none" filterBy="#{aut.ID_AUTOR}" filterMatchMode="contains" rendered="false">                        
+                    <p:commandButton ajax="true" actionListener="#{autor.borrarAutor(aut)}" update=":frmListAutor:tablaAutor " process="@this" icon="ui-icon-trash" type="submit">
+                        <p:confirm header="Borrar" message="¿Esta seguro que desea borrar estos datos?" icon="ui-icon-alert" />
+                    </p:commandButton>  
+                </p:column>
+            </p:dataTable>
+
+
+            <p:dialog header="EDITAR AUTOR" widgetVar="dlg1" modal="true" showEffect="clip" hideEffect="clip" resizable="false" closable="false">
+                <p:outputPanel id="grid" style="text-align:center;margin-bottom: 10px"  >
+                    <p:panelGrid  columns="2" columnClasses="Wid20, Wid80">
+                        <f:facet name="header">
+                            <div style="margin: 5px 5px 5px 5px">
+                                Modifique correctamente los datos :
+                            </div>  
+                        </f:facet>
+                        <p:outputLabel value="Id :" />
+                        <p:inputText value="#{autor.autAux.ID_AUTOR}" disabled="true" styleClass="Wid100" />
+                        <p:outputLabel value="Nombre :" />
+                        <p:inputText value="#{autor.autAux.NOMBRE}" styleClass="Wid100"/>
+                        <p:outputLabel value="Ap.Paterno :" />
+                        <p:inputText value="#{autor.autAux.APELLIDO_PATERNO}" styleClass="Wid100"/>
+                        <p:outputLabel value="Ap. Materno :" />
+                        <p:inputText value="#{autor.autAux.APELLIDO_MATERNO}" styleClass="Wid100"/>
+                        <p:outputLabel value="País :" />
+                        <p:selectOneMenu value="#{autor.autAux.ID_PAIS}" style="width: 100%">
+                            <f:selectItems value="#{autor.cboPais}" />
+                        </p:selectOneMenu>
+
+                        <f:facet name="footer">
+                            <div align="center" style="margin-top: 3px; margin-bottom: 3px;">
+                                <p:commandButton value="Aceptar"  oncomplete="PF('dlg1').hide();" icon="ui-icon-check" actionListener="#{autor.actualizarAutor()}" update=":frmListAutor:tablaAutor" style="margin-right:10px;"/>
+                                <p:commandButton value="Cancelar" type="reset" icon="ui-icon-close" onclick="PF('dlg1').hide();" />
+                            </div>
+                        </f:facet>
+
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+            
+            <p:confirmDialog id="eliminar" global="true" showEffect="clip" hideEffect="clip" style="font-size: 0.67em" >
+                <div align="center">
+                    <p:commandButton value="Aceptar" type="button"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </div>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+    
+</ui:composition>
